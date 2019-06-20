@@ -1,0 +1,49 @@
+<div class="loginContainer">
+
+  <div class="container">
+
+    <div class="row justify-content-md-center">
+
+      <div class="col-md-4">
+
+        <div class="avatarFrameOffline mt-3 mb-3">
+
+          <img src="assets/img/generic_avatar.png" class="avatarImage img-fluid" />
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row justify-content-md-center">
+
+      <div class="col-md-6">
+        <div class="text-center">
+
+          <h3>Iniciar Sesión</h3>
+
+        </div>        
+        <div class="borderedContainer">
+
+          <input [(ngModel)]="email" class="form-control mb-3 " type="email" placeholder="Ingrese su Email">
+          <input [(ngModel)]="password" class="form-control mb-3 " type="password" placeholder="Ingrese su contraseña">
+          <input [(ngModel)]="nick" *ngIf="operation == 'register'" class="form-control mb-3" type="text" placeholder="Ingrese su Nick">
+
+      </div>
+
+      <div class="text-center mt-3">
+
+        <a (click)="login()" *ngIf="operation == 'login'" class="btn btn-primary mb-3 buttonLogin">Iniciar Sesión</a>
+        <a (click)="register()"*ngIf="operation == 'register'" class="btn btn-primary mb-3 buttonLogin">Registrarme</a>
+
+        <p *ngIf="operation == 'register'" class="text-center">¿Ya tienes cuenta? Has <a (click)="operation = 'login'">Login</a></p>
+        <p *ngIf="operation == 'login'" class="text-center"> ¿No tienes cuenta? <a (click)="operation = 'register'">Registrate</a></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>

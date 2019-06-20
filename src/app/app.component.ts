@@ -1,4 +1,11 @@
+import { DialogService } from 'ng2-bootstrap-modal';
+import { RequestsService } from './services/requests.service';
+import { UserService } from './services/user.service';
+import { AuthenticationService } from './services/authentication.service';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from './interfaces/user';
+import { RequestComponent } from './modals/request/request.component';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +14,29 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'messenger';
+  user: User;
+  requests: any[] = [];
+  mailsShown: any[] = [];
+
+  constructor(public router: Router, private authenticationService: AuthenticationService,
+    private userService: UserService, private requestsService: RequestsService,
+    private dialogService: DialogService) {
+    this.authenticationService.getStatus().subscribe((status) => {
+      this.userService.getUserByUid(status.uid).valueChanges().subscribe((data: User) => {
+        this.user = data;
+        this.requestsService.getRequestsForEmai(this.user.email).valueChanges().subscribe((requests: any) => {
+          this.requests = requests;
+          this.requests = this.requests.filter((r) => {
+            return r.status !== 'accepted' && r.status !== 'rejected';
+          });
+          this.requests.forEach((r) => {
+            if (this.mailsShown.indexOf(r.sender) === -1) {
+              this.mailsShown.push((r.sender));
+              this.dialogService.addDialog(RequestComponent, { scope: this, currentRequest: r });
+            }
+          })
+        }, () => { })
+      }, () => { })
+    }, () => { })
+  }
 }
